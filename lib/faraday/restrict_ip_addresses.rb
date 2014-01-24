@@ -4,7 +4,7 @@ require 'ipaddr'
 module Faraday
   class RestrictIPAddresses < Faraday::Middleware
     class AddressNotAllowed < Faraday::Error::ClientError ; end
-    VERSION = '0.0.1'
+    VERSION = '0.0.2'
 
     RFC_1918_NETWORKS = %w(
       127.0.0.0/8
