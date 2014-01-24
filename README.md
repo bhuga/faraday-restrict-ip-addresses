@@ -23,7 +23,7 @@ end
 faraday.get 'http://www.badgerbadgerbadger.com' # 150.0.0.150 or something
 # => cool
 
-faraday.get 'http://malicious-callback.com      # 172.0.0.150, maybe a secret internal server? Maybe not?
+faraday.get 'http://malicious-callback.com'      # 172.0.0.150, maybe a secret internal server? Maybe not?
 # => raises Faraday::RestrictIPAddresses::AddressNotAllowed
 ```
 
