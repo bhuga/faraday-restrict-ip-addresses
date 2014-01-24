@@ -13,7 +13,7 @@ Usage
 faraday = Faraday.new do |builder|
   builder.request :url_encoded
   builder.use     :restrict_ip_addresses, deny_rfc1918: true,
-                                          allow_localhost: true
+                                          allow_localhost: true,
                                           deny: ['8.0.0.0/8',
                                                  '224.0.0.0/7'],
                                           allow: ['192.168.0.0/24']
