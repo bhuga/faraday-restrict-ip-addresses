@@ -6,18 +6,24 @@ describe Faraday::RestrictIPAddresses do
     @rip = described_class.new(lambda{|env| env}, opts)
   end
 
-  def allowed(string_address)
+  def allowed(*addresses)
     url = URI.parse("http://test.com")
-    ip  = IPAddr.new(string_address).hton
+    ips  = addresses.map { |add| IPAddr.new(add).hton }
 
-    Socket.expects(:gethostbyname).with(url.host).returns(['garbage', [], 30, ip])
+    # Socket returns a bunch of other stuff with gethostbyname. ipv6 addresses,
+    # other socket information, whatever. We ignore it all internally and return
+    # only valid ipv4 addresses, so just append what we're checking to some
+    # garbage data like we expect.
+    return_addresses = ['garbage', [], 30]
+    return_addresses += ips
+    Socket.expects(:gethostbyname).with(url.host).returns(return_addresses)
 
     env = { url: url }
     @rip.call(env)
   end
 
-  def denied(string_address)
-    expect(-> { allowed(string_address) }).to raise_error(Faraday::RestrictIPAddresses::AddressNotAllowed)
+  def denied(*addresses)
+    expect(-> { allowed(*addresses) }).to raise_error(Faraday::RestrictIPAddresses::AddressNotAllowed)
   end
 
     it "defaults to allowing everything" do
@@ -32,6 +38,14 @@ describe Faraday::RestrictIPAddresses do
 
       allowed '7.255.255.255'
       denied  '8.0.0.1'
+    end
+
+    it "disallows addresses when any IP address is disallowed" do
+      middleware deny: ["8.0.0.0/8"]
+
+      denied '10.0.0.10', '8.8.8.8'
+      allowed '10.0.0.10'
+      denied '10.0.0.10', '8.8.8.8'
     end
 
     it "blacklists RFC1918 addresses" do
