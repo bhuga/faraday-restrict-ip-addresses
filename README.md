@@ -2,9 +2,11 @@ Faraday::RestrictIPAddresses
 ============================
 
 Prevent Faraday from hitting an arbitrary list of IP addresses, with helpers
-for RFC 1918 networks and localhost.
+for RFC 1918 networks, RFC 6890 networks, and localhost.
 
-System DNS facilities are used, so lookups should be cached.
+System DNS facilities are used, so lookups should be cached instead of making
+another request. Addresses are invalid if a host has has at least one invalid
+DNS entry.
 
 Usage
 =====
@@ -12,7 +14,7 @@ Usage
 ```ruby
 faraday = Faraday.new do |builder|
   builder.request :url_encoded
-  builder.use     :restrict_ip_addresses, deny_rfc1918: true,
+  builder.use     :restrict_ip_addresses, deny_rfc6890: true,
                                           allow_localhost: true,
                                           deny: ['8.0.0.0/8',
                                                  '224.0.0.0/7'],
@@ -40,5 +42,3 @@ Dat @bhuga with shoutouts to @mastahyeti's [gist.](https://gist.github.com/masta
 #### UNLICENSE
 
 It's right there.
-
-
