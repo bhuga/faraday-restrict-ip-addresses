@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    faraday-restrict-ip-addresses (0.0.1)
+    faraday-restrict-ip-addresses (0.0.2)
       faraday (>= 0.8, < 0.9)
 
 GEM

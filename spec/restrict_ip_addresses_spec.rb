@@ -43,6 +43,15 @@ describe Faraday::RestrictIPAddresses do
       denied  '10.0.0.252'
     end
 
+    it "blacklists RFC6890 addresses" do
+      middleware deny_rfc6890: true
+
+      allowed '5.5.5.5'
+      denied  '240.15.15.15'
+      denied  '192.168.15.55'
+      denied  '10.0.0.252'
+    end
+
     it "allows exceptions to disallowed addresses" do
       middleware deny_rfc1918: true,
                  allow: ["192.168.0.0/24"]
@@ -70,4 +79,3 @@ describe Faraday::RestrictIPAddresses do
     end
 
 end
-
