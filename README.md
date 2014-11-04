@@ -14,7 +14,7 @@ Usage
 ```ruby
 faraday = Faraday.new do |builder|
   builder.request :url_encoded
-  builder.use     :restrict_ip_addresses, deny_rfc6890: true,
+  builder.request :restrict_ip_addresses, deny_rfc6890: true,
                                           allow_localhost: true,
                                           deny: ['8.0.0.0/8',
                                                  '224.0.0.0/7'],

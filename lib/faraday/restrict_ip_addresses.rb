@@ -1,10 +1,9 @@
-require 'faraday'
+require 'faraday/restrict_ip_addresses/version'
 require 'ipaddr'
 
 module Faraday
   class RestrictIPAddresses < Faraday::Middleware
     class AddressNotAllowed < Faraday::Error::ClientError ; end
-    VERSION = '0.0.3'
 
     RFC_1918_NETWORKS = %w(
       127.0.0.0/8
@@ -63,6 +62,5 @@ module Faraday
       Socket.gethostbyname(hostname).map { |a| IPAddr.new_ntoh(a) rescue nil }.compact
     end
   end
-
-  register_middleware restrict_ip_addresses: lambda { RestrictIPAddresses }
+  Request.register_middleware restrict_ip_addresses: lambda { RestrictIPAddresses }
 end
