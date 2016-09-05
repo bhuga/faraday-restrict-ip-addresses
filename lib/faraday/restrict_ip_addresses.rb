@@ -60,6 +60,9 @@ module Faraday
 
     def addresses(hostname)
       Addrinfo.getaddrinfo(hostname, nil, :INET, :STREAM).map { |a| IPAddr.new(a.ip_address) }
+    rescue SocketError => e
+      # In case of invalid hostname, return an empty list of addresses
+      []
     end
   end
   Request.register_middleware restrict_ip_addresses: lambda { RestrictIPAddresses }

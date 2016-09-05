@@ -98,4 +98,13 @@ describe Faraday::RestrictIPAddresses do
       denied '0x7f.1'
       denied '0177.1'
     end
+
+    it "allows addresses for which DNS fails" do
+      middleware deny_rfc1918: true,
+                 deny: ['8.0.0.0/8'],
+                 allow: ['8.5.0.0/24', '192.168.14.0/24']
+      url = URI.parse("http://thisisanonexistinghostname.com")
+      Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).raises(SocketError)
+      @rip.call(url: url)
+    end
 end
