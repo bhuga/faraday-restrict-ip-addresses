@@ -59,7 +59,7 @@ module Faraday
     end
 
     def addresses(hostname)
-      Socket.gethostbyname(hostname).map { |a| IPAddr.new_ntoh(a) rescue nil }.compact
+      Addrinfo.getaddrinfo(hostname, nil, :INET, :STREAM).map { |a| IPAddr.new(a.ip_address) }
     end
   end
   Request.register_middleware restrict_ip_addresses: lambda { RestrictIPAddresses }

@@ -8,15 +8,9 @@ describe Faraday::RestrictIPAddresses do
 
   def allowed(*addresses)
     url = URI.parse("http://test.com")
-    ips  = addresses.map { |add| IPAddr.new(add).hton }
+    ips = addresses.map { |add| Addrinfo.tcp(add, nil) }
 
-    # Socket returns a bunch of other stuff with gethostbyname. ipv6 addresses,
-    # other socket information, whatever. We ignore it all internally and return
-    # only valid ipv4 addresses, so just append what we're checking to some
-    # garbage data like we expect.
-    return_addresses = ['garbage', [], 30]
-    return_addresses += ips
-    Socket.expects(:gethostbyname).with(url.host).returns(return_addresses)
+    Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).returns(ips)
 
     env = { url: url }
     @rip.call(env)
@@ -92,4 +86,16 @@ describe Faraday::RestrictIPAddresses do
       denied  '192.168.13.14'
     end
 
+    it "blacklists normalized values" do
+      middleware deny_rfc6890: true,
+                 allow_localhost: false
+
+      denied '0'
+      denied '0x0'
+      denied '0x00.0'
+      denied '00.0'
+      denied '127.0.0.1'
+      denied '0x7f.1'
+      denied '0177.1'
+    end
 end
