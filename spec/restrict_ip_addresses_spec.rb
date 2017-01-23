@@ -10,7 +10,7 @@ describe Faraday::RestrictIPAddresses do
     url = URI.parse("http://test.com")
     ips = addresses.map { |add| Addrinfo.tcp(add, nil) }
 
-    Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).returns(ips)
+    Addrinfo.expects(:getaddrinfo).with(url.host, nil, :UNSPEC, :STREAM).returns(ips)
 
     env = { url: url }
     @rip.call(env)
@@ -104,7 +104,15 @@ describe Faraday::RestrictIPAddresses do
                  deny: ['8.0.0.0/8'],
                  allow: ['8.5.0.0/24', '192.168.14.0/24']
       url = URI.parse("http://thisisanonexistinghostname.com")
-      Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).raises(SocketError)
+      Addrinfo.expects(:getaddrinfo).with(url.host, nil, :UNSPEC, :STREAM).raises(SocketError)
       @rip.call(url: url)
+    end
+
+    it "works for IPV6 localhost addresses" do
+      middleware allow_localhost: false,
+                 deny: ['::1']
+
+      denied '::1'
+      denied '0:0:0:0:0:0:0:1'
     end
 end

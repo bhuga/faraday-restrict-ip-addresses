@@ -47,7 +47,7 @@ module Faraday
     end
 
     def denied?(env)
-      addresses(env[:url].host).any? { |a| denied_ip?(a) }
+      addresses(env[:url].hostname).any? { |a| denied_ip?(a) }
     end
 
     def denied_ip?(address)
@@ -59,7 +59,7 @@ module Faraday
     end
 
     def addresses(hostname)
-      Addrinfo.getaddrinfo(hostname, nil, :INET, :STREAM).map { |a| IPAddr.new(a.ip_address) }
+      Addrinfo.getaddrinfo(hostname, nil, :UNSPEC, :STREAM).map { |a| IPAddr.new(a.ip_address) }
     rescue SocketError => e
       # In case of invalid hostname, return an empty list of addresses
       []
