@@ -8,14 +8,9 @@ describe Faraday::RestrictIPAddresses do
 
   def allowed(*addresses)
     url = URI.parse("http://test.com")
+    ips = addresses.map { |add| Addrinfo.tcp(add, nil) }
 
-    if addresses.include?('boom')
-      Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).raises(SocketError)
-    else
-      ips = addresses.map { |add| Addrinfo.tcp(add, nil) }
-
-      Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).returns(ips)
-    end
+    Addrinfo.expects(:getaddrinfo).with(url.host, nil, :INET, :STREAM).returns(ips)
 
     env = { url: url }
     @rip.call(env)
@@ -102,12 +97,5 @@ describe Faraday::RestrictIPAddresses do
       denied '127.0.0.1'
       denied '0x7f.1'
       denied '0177.1'
-    end
-
-    it "does not pass through failed lookups" do
-      middleware deny_rfc6890: true,
-                 allow_localhost: false
-
-      denied 'boom'
     end
 end

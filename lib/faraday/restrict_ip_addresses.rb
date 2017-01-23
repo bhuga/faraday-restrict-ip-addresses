@@ -48,8 +48,6 @@ module Faraday
 
     def denied?(env)
       addresses(env[:url].host).any? { |a| denied_ip?(a) }
-    rescue SocketError
-      true
     end
 
     def denied_ip?(address)
