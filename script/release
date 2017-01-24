@@ -1,3 +1,5 @@
+#!/bin/sh
+
 gem build faraday-restrict-ip-addresses.gemspec
 gem push *.gem
 rm *.gem
