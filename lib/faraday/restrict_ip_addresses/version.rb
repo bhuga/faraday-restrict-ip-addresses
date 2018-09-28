@@ -1,6 +1,5 @@
-require 'faraday'
 module Faraday
-  class RestrictIPAddresses < Faraday::Middleware
+  module RestrictIPAddresses
     VERSION = '0.1.3'
   end
 end
