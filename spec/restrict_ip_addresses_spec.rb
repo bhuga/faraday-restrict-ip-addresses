@@ -1,7 +1,7 @@
 require 'faraday/restrict_ip_addresses'
 require 'spec_helper'
 
-describe Faraday::RestrictIPAddresses do
+describe Faraday::RestrictIPAddresses::Middleware do
   def middleware(opts = {})
     @rip = described_class.new(lambda{|env| env}, opts)
   end
