@@ -1,8 +1,6 @@
-require_relative 'lib/faraday/restrict_ip_addresses/version'
-
 Gem::Specification.new do |spec|
-  spec.add_dependency 'faraday', '~>0.9.0'
-  spec.add_development_dependency 'bundler', '~> 1.0'
+  spec.version = '0.1.2' # don't forget to update version.rb
+
   spec.authors = ["Ben Lavender"]
   spec.description = %q{Restrict the IP addresses Faraday will connect to}
   spec.email = ['bhuga@github.com']
@@ -16,5 +14,6 @@ Gem::Specification.new do |spec|
   spec.required_rubygems_version = '>= 1.3.5'
   spec.summary = spec.description
   spec.test_files += Dir.glob("spec/**/*")
-  spec.version = Faraday::RestrictIPAddresses::VERSION
+
+  spec.add_dependency 'faraday', '~>0.9.0'
 end
