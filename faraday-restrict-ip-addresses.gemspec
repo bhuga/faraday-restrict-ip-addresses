@@ -15,5 +15,5 @@ Gem::Specification.new do |spec|
   spec.summary = spec.description
   spec.test_files += Dir.glob("spec/**/*")
 
-  spec.add_dependency 'faraday', '~>0.9.0'
+  spec.add_dependency 'faraday', '~> 1.0'
 end
