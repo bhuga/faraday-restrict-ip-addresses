@@ -17,7 +17,7 @@ describe Faraday::RestrictIPAddresses do
   end
 
   def denied(*addresses)
-    expect(-> { allowed(*addresses) }).to raise_error(Faraday::RestrictIPAddresses::AddressNotAllowed)
+    expect { allowed(*addresses) }.to raise_error(Faraday::RestrictIPAddresses::AddressNotAllowed)
   end
 
     it "defaults to allowing everything" do

@@ -1,9 +1,9 @@
-require 'faraday/restrict_ip_addresses/version'
+require 'faraday'
 require 'ipaddr'
 
 module Faraday
   class RestrictIPAddresses < Faraday::Middleware
-    class AddressNotAllowed < Faraday::Error::ClientError ; end
+    class AddressNotAllowed < Faraday::ClientError ; end
 
     RFC_1918_NETWORKS = %w(
       127.0.0.0/8
@@ -67,3 +67,5 @@ module Faraday
   end
   Request.register_middleware restrict_ip_addresses: lambda { RestrictIPAddresses }
 end
+
+require 'faraday/restrict_ip_addresses/version'
