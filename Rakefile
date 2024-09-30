@@ -7,7 +7,7 @@ end
 task release: %i[clean spec git gem] do
   sh "echo gem push *.gem"
 
-  sh "git tag v%s" % [version]
+  sh "git tag v%s" % [Faraday::RestrictIPAddresses::VERSION]
   sh "git push --tags"
 end
 
