@@ -5,7 +5,9 @@ task :spec do
 end
 
 task release: %i[clean spec git gem] do
-  sh "echo gem push *.gem"
+  otp = `op item get RubyGems.org --otp`.chomp
+  ENV["GEM_HOST_OTP_CODE"] = otp unless otp.empty?
+  sh "gem push *.gem"
 
   sh "git tag v%s" % [Faraday::RestrictIPAddresses::VERSION]
   sh "git push --tags"
