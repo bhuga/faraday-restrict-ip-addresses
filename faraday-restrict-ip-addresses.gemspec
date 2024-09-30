@@ -11,7 +11,8 @@ Gem::Specification.new do |spec|
   spec.licenses = ['Unlicense']
   spec.name = 'faraday-restrict-ip-addresses'
   spec.require_paths = ['lib']
-  spec.required_rubygems_version = '>= 1.3.5'
+  spec.required_ruby_version = '>= 2.7'
+  spec.required_rubygems_version = '>= 3.1.2'
   spec.summary = spec.description
   spec.test_files += Dir.glob("spec/**/*")
 
